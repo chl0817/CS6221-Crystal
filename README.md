@@ -2,15 +2,12 @@
 
 Instruction for how to use Crystal in Vscode:
 First thing we need to do is install Homebrew, follow these steps:
-For MacOS
+#For MacOS
 1. Open Terminal
 On macOS, you can open the Terminal by searching for it in Spotlight (Cmd + Space then type "Terminal") or from Applications > Utilities > Terminal.
 
 2. Install Homebrew
 Run the following command in the terminal to install Homebrew:
-
-bash
-Copy code
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 This command downloads and runs the Homebrew installation script.
 
@@ -18,20 +15,16 @@ This command downloads and runs the Homebrew installation script.
 The script will show some details about the installation. You may be asked to enter your password to proceed.
 
 After installation, Homebrew will prompt you to add it to your shell’s PATH. The instructions will look like this:
-
-bash
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 Copy and paste these lines into your terminal to make brew accessible from any terminal session.
 
 4. Verify Installation
 After installation, verify that Homebrew is installed correctly by running:
-
-bash
 brew --version
 This should display the version of Homebrew installed, confirming it’s ready to use.
 
-For Windows:
+#For Windows:
 1. Install Windows Subsystem for Linux (WSL)
 Open PowerShell as Administrator and run the following command to enable WSL:
 
@@ -43,15 +36,12 @@ This command installs WSL with the default Ubuntu distribution. Restart your com
 Once WSL is installed, open the Ubuntu terminal from the Start menu.
 3. Install Homebrew on WSL
 In the Ubuntu terminal, run the following command to install Homebrew:
-
-bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 Follow the installation instructions. You may need to install some dependencies that Homebrew requires, which the installer will prompt you to do.
 
 4. Add Homebrew to Your PATH
 After installation, add Homebrew to your PATH by adding the following line to your .profile or .bashrc file:
 
-bash
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 This command allows you to use brew from any terminal session in WSL.
@@ -59,11 +49,10 @@ This command allows you to use brew from any terminal session in WSL.
 5. Verify Installation
 To check if Homebrew is installed correctly, run:
 
-bash
 brew --version
 You should see the version of Homebrew, confirming it’s ready to use on WSL.
 
-Installation for Crystal:
+#Installation for Crystal:
 1. Install Crystal (MacOS)
 If you're on macOS and have Homebrew installed, you can install Crystal by running:
 
