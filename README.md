@@ -57,6 +57,7 @@ You should see the version of Homebrew, confirming it’s ready to use on WSL.
 If you're on macOS and have Homebrew installed, you can install Crystal by running:
 
 brew install crystal
+
 2. Install Crystal (Linux)
 For Linux, you can install Crystal by following these steps:
 
