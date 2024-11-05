@@ -2,7 +2,7 @@
 
 Instruction for how to use Crystal in Vscode:
 First thing we need to do is install Homebrew, follow these steps:
-#For MacOS
+# For MacOS
 1. Open Terminal
 On macOS, you can open the Terminal by searching for it in Spotlight (Cmd + Space then type "Terminal") or from Applications > Utilities > Terminal.
 
@@ -24,7 +24,7 @@ After installation, verify that Homebrew is installed correctly by running:
 brew --version
 This should display the version of Homebrew installed, confirming it’s ready to use.
 
-#For Windows:
+# For Windows:
 1. Install Windows Subsystem for Linux (WSL)
 Open PowerShell as Administrator and run the following command to enable WSL:
 
@@ -52,7 +52,7 @@ To check if Homebrew is installed correctly, run:
 brew --version
 You should see the version of Homebrew, confirming it’s ready to use on WSL.
 
-#Installation for Crystal:
+# Installation for Crystal:
 1. Install Crystal (MacOS)
 If you're on macOS and have Homebrew installed, you can install Crystal by running:
 
