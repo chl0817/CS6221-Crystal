@@ -65,6 +65,7 @@ curl -fsSL https://crystal-lang.org/install.sh | bash
 Alternatively, on Ubuntu-based systems, you can use:
 sudo apt update
 sudo apt install crystal
+
 3. Install Crystal (Windows)
 For Windows, Crystal requires Windows Subsystem for Linux (WSL) or Docker since it doesn’t natively support Windows. You can install WSL, set up an Ubuntu distribution, and then follow the Linux installation steps.
 
