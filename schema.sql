@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS Banned_From (
     user_id INTEGER NOT NULL,
     chatroom_id INTEGER NOT NULL,
     banned_by INTEGER NOT NULL,
-    ban_end TIMESTAMP,
     PRIMARY KEY (user_id, chatroom_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (chatroom_id) REFERENCES ChatRooms(chatroom_id),
