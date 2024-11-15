@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Chatroom</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+    
+    <div id="login-page">
+        <h2>Login to Live Chatroom</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="javascript:void(0);" onclick="showRegisterPage()">Register here</a></p>
+    </div>
+
+    <div id="register-page" style="display: none;">
+        <h2>Create an Account</h2>
+        <input type="text" id="new-username" placeholder="Username">
+        <input type="password" id="new-password" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="javascript:void(0);" onclick="showLoginPage()">Login here</a></p>
+    </div>
+
+    
+    <div id="chatroom" style="display: none;">
+        <div class="chat-container">
+            <div class="video-area">
+                <video id="live-stream" width="1080" height="720" controls>
+                    <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="chat-area">
+                <div id="chat-box"></div>
+                <input type="text" id="chat-input" placeholder="Type a message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> 
+</body>
+</html>
