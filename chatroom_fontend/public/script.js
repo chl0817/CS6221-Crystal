@@ -36,9 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-        console.log(`当前登录用户: ${currentUser}`);
+        console.log(`Current User: ${currentUser}`);
     } else {
-        console.log('未登录');
+        console.log('Not logged in');
     }
 
     const searchBar = document.getElementById('search-bar');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('currentUser'); 
-            alert('已退出登录');
+            alert('Logout successfully');
             window.location.href = 'login.html'; 
         });
     }

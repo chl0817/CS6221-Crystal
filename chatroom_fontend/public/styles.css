@@ -12,14 +12,18 @@ body {
     height: 100vh;
 }
 
+
 .navbar {
-    grid-column: 1 / span 2;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end; 
     padding: 10px 20px;
-    background-color: #fff;
+    background-color: #f8f9fa;
     border-bottom: 1px solid #ddd;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
 }
 
 .search-bar {
@@ -214,7 +218,7 @@ video {
 }
 
 .video-area {
-    flex: 3; /* 视频区域占3份 */
+    flex: 3;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,7 +226,7 @@ video {
 }
 
 .chat-area {
-    flex: 2; /* 聊天区域占2份 */
+    flex: 2;
     display: flex;
     flex-direction: column;
     background-color: #f9f9f9;
@@ -279,4 +283,18 @@ video {
 .chat-input-container {
     display: flex;
     align-items: center;
+}
+
+.logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
 }

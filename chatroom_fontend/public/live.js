@@ -48,4 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             sendBtn.click();
         }
     });
+
+    const logoutButton = document.getElementById('logout-btn');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('currentUser'); 
+            alert('Logout successfully');
+            window.location.href = 'login.html'; 
+        });
+    }
 });
