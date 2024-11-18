@@ -10,16 +10,17 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+     
 }
 
 
 .navbar {
     display: flex;
-    justify-content: flex-end; 
-    padding: 10px 20px;
+    justify-content: flex-end;  
+    padding: 10px 20px;  
     background-color: #f8f9fa;
     border-bottom: 1px solid #ddd;
-    position: fixed; 
+    position: fixed;  
     top: 0;
     left: 0;
     width: 100%;
@@ -293,7 +294,9 @@ video {
     padding: 10px 20px;
     font-size: 14px;
     cursor: pointer;
+    margin-right: 30px; 
 }
+
 
 .logout-button:hover {
     background-color: #d32f2f;
