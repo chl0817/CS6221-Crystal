@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <main class="live-content">
+            <!-- video area -->
+            <div class="video-area">
+                <video id="live-video" controls autoplay>
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- chat -->
+            <div class="chat-area">
+                <!-- chat area -->
+                <div id="chat-box" class="chat-box"></div>
+                <!-- output button -->
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" placeholder="Type a message...">
+                    <button id="send-btn">Send</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="live.js"></script>
+</body>
+</html>
