@@ -7,12 +7,12 @@ require "./database"
 require "./authentication"
 require "./chat"
 
-# 读取配置文件
+# Read configuration file
 config = YAML.parse(File.read("config/config.yml")).as_h
 
-# 连接 SQLite 数据库
+# Connecting to a SQLite database
 DB.open "sqlite3://#{config["database"].as_s}" do |db|
-  # 启动 Kemal
+  # Activate Kemal
   get "/" do
     # Load the main page
     send_file "public/index.html"
