@@ -1,11 +1,24 @@
 body {
+    background-image: url('image/3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+
 .container {
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +29,8 @@ body {
 
 .navbar {
     display: flex;
-    justify-content: flex-end;  
+    justify-content: center;
+    align-items: center;
     padding: 10px 20px;  
     background-color: #f8f9fa;
     border-bottom: 1px solid #ddd;
@@ -25,6 +39,27 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000; 
+    border-radius: 10px;
+}
+
+.navbar-left {
+    display: none;
+    flex: 1;  
+    display: flex;
+    align-items: center;
+}
+
+.navbar-center {
+    flex: 2; 
+    margin-left: 200px;
+    /* text-align: center; */
+}
+
+.navbar-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
 }
 
 .search-bar {
@@ -183,11 +218,10 @@ form a {
 }
 
 .search-bar {
-    width: 300px;
-    padding: 10px;
-    margin: 10px auto;
+    width: 250px;
+    padding: 8px 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 14px;
 }
 
@@ -219,7 +253,7 @@ video {
 }
 
 .video-area {
-    flex: 3;
+    flex: 4;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -227,7 +261,7 @@ video {
 }
 
 .chat-area {
-    flex: 2;
+    flex: 1;
     display: flex;
     flex-direction: column;
     background-color: #f9f9f9;
@@ -301,3 +335,16 @@ video {
 .logout-button:hover {
     background-color: #d32f2f;
 }
+
+input[type="text"],
+input[type="password"] {
+    display: block;
+    width: 90%;
+    max-width: 600px; 
+    margin: 10px auto; 
+    padding: 8px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px;
+    box-sizing: border-box; 
+}
+
