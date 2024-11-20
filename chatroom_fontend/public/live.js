@@ -4,15 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatBox = document.getElementById('chat-box');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
-    const socket = io('http://localhost:3000'); // Connect to the server
+    const socket = io('http://localhost:3000'); 
 
-    let isPlaying = false; // Track whether the video is playing
-    let currentVideoTime = 0; // Store the current video time
+    let isPlaying = false; 
+    let currentVideoTime = 0;
 
     const username = localStorage.getItem('currentUser');
     if (!username) {
         alert('Please login first！');
-        window.location.href = 'login.html'; // go to login page
+        window.location.href = 'login.html'; 
         return;
     }
 
@@ -24,37 +24,36 @@ document.addEventListener('DOMContentLoaded', () => {
         videoElement.load();
     }
 
-    // Emit 'user joined' message when a new user joins
+
     socket.emit('user joined', username);
 
-    // Listen for video start time when a new user joins
+
     socket.on('video start time', ({ currentTime, isPlaying }) => {
-        // Set the video to the shared current time and play state
+        
         videoElement.currentTime = currentTime;
-        currentVideoTime = currentTime; // Update the client's current video time
+        currentVideoTime = currentTime; 
         if (isPlaying) {
             videoElement.play();
-            isPlaying = true; // Update play state
+            isPlaying = true; 
         } else {
             videoElement.pause();
-            isPlaying = false; // Update pause state
+            isPlaying = false; 
         }
     });
 
-    // Listen for video actions (play, pause, seek)
+
     socket.on('video action', (data) => {
         if (data.action === 'play' && !isPlaying) {
             videoElement.play();
-            isPlaying = true; // Update play state
+            isPlaying = true;
         } else if (data.action === 'pause' && isPlaying) {
             videoElement.pause();
-            isPlaying = false; // Update pause state
+            isPlaying = false;
         } else if (data.action === 'seek') {
-            videoElement.currentTime = data.currentTime; // Sync video position
+            videoElement.currentTime = data.currentTime; 
         }
     });
 
-    // Handle video play/pause events
     videoElement.addEventListener('play', () => {
         if (!isPlaying) {
             isPlaying = true;
@@ -69,14 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle video seek events (when user skips forward/backward)
     videoElement.addEventListener('seeked', () => {
         if (videoElement.currentTime !== currentVideoTime) {
             socket.emit('video seek', videoElement.currentTime);
         }
     });
 
-    // Handle chat message events
     socket.on('chat message', (msg) => {
         const messageElement = document.createElement('div');
         messageElement.textContent = msg;
@@ -99,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Logout functionality
     const logoutButton = document.getElementById('logout-btn');
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
