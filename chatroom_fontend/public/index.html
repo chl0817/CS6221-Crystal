@@ -23,25 +23,33 @@
 
         <!-- main -->
         <main class="main-content">
+            <nav id="results-tab-bar" class="tab-bar">
+               
+            </nav>
+            <div id="search-results" class="video-grid">
+                <!-- Video cards will be dynamically inserted here -->
+            </div>
+            
             <nav class="tab-bar">
                 <span class="tab active">Newest</span>
             </nav>
             <div id="video-grid" class="video-grid">
                 <!-- Video cards will be dynamically inserted here -->
             </div>
-            <div id="search-results" class="video-grid">
-                <!-- Video cards will be dynamically inserted here -->
-            </div>
+
+           
         </main>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const searchBar = document.getElementById("search-bar");
                 const searchResults = document.getElementById("search-results");
+                const resultsTabBr = document.getElementById("results-tab-bar");
     
                 // Handle Enter key press to trigger the search
                 searchBar.addEventListener("keydown", (event) => {
                     if (event.key === "Enter") {
                         const query = searchBar.value.trim();
+                        resultsTabBr.innerHTML = '<span id="results-tab" class="tab active">Results</span>'
     
                         if (query.length === 0) {
                             searchResults.innerHTML = ""; // Clear results on empty input
@@ -74,6 +82,10 @@
     
                 // Function to display results
                 const renderVideos = (videos) => {
+                    if (videos.length === 0) {
+                     searchResults.innerHTML = "<p class='no-results'>No videos available</p>";
+                     }   
+                     else {
                     searchResults.innerHTML = ""; // Clear previous results
                     videos.forEach((video) => {
                         const videoCard = document.createElement('a');
@@ -87,6 +99,7 @@
                         `;
                         searchResults.appendChild(videoCard);
                     });
+                }
                 };
             });
         </script>
