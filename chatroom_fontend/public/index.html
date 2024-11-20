@@ -128,9 +128,10 @@
                     const uploadCard = document.createElement('a');
                     uploadCard.className = 'video-card upload-card';
                     uploadCard.innerHTML = `
-                        <div class="upload-card-content">
-                            <h4>Upload New Video</h4>
-                        </div>
+                       
+                        <img class="video-thumbnail" src="image/4.png" alt="video thumbnail">
+                        <h4 class="video-title">Create New Chat Room</h4>
+                        
                     `;
                     uploadCard.addEventListener('click', () => {
                         fileInput.click(); // Trigger file input dialog when clicked
