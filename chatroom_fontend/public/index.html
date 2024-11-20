@@ -106,15 +106,29 @@
     </div>
 
     <!-- Hidden file input for video upload -->
-    <input type="file" id="video-file-input" style="display:none" accept="video/*">
+    <div id="form-overlay" class="form-overlay" style="display: none;">
+        <div class="upload-form">
+            <h3>Upload New Video</h3>
+            <label for="video-title-input">Video Title:</label>
+            <input type="text" id="video-title-input" placeholder="Enter video title">
+            <label for="video-src-input">Video URL:</label>
+            <input type="text" id="video-src-input" placeholder="Enter video URL">
+            <div class="form-actions">
+                <button id="upload-video-btn" class="upload-btn">Upload</button>
+                <button id="close-form-btn" class="close-btn">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const videoGrid = document.getElementById('video-grid');
-            const fileInput = document.getElementById('video-file-input');
+            const formOverlay = document.getElementById('form-overlay');
+            const closeFormBtn = document.getElementById('close-form-btn');
+            const uploadVideoBtn = document.getElementById('upload-video-btn');
     
             // Fetch video data from the backend API
-            fetch('http://localhost:8007/api/videos')  // Ensure this is the correct URL
+            fetch('http://localhost:8007/api/videos')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -122,24 +136,21 @@
                     return response.json();
                 })
                 .then(videos => {
-                    // Clear existing content in the video grid
                     videoGrid.innerHTML = '';
-
+    
+                    // Add the "Create New Video" card
                     const uploadCard = document.createElement('a');
                     uploadCard.className = 'video-card upload-card';
                     uploadCard.innerHTML = `
-                       
                         <img class="video-thumbnail" src="image/4.png" alt="video thumbnail">
-                        <h4 class="video-title">Create New Chat Room</h4>
-                        
+                        <h4 class="video-title">Create New Video</h4>
                     `;
                     uploadCard.addEventListener('click', () => {
-                        fileInput.click(); // Trigger file input dialog when clicked
+                        formOverlay.style.display = 'flex'; // Show the form overlay
                     });
-    
                     videoGrid.appendChild(uploadCard);
     
-                    // Dynamically create video cards for each video
+                    // Dynamically add video cards
                     videos.forEach(video => {
                         const videoCard = document.createElement('a');
                         videoCard.href = `live.html?src=${video.src}`;
@@ -152,42 +163,71 @@
                         `;
                         videoGrid.appendChild(videoCard);
                     });
-    
-                    
-                    
                 })
-                .catch(error => {
-                    console.error('Error loading videos:', error);
-                    videoGrid.innerHTML = '<p>Failed to load videos.</p>';
-                });
+                .catch(error => console.error('Error loading videos:', error));
     
-            // Handle the file input change event (when a user selects a file)
-            fileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            // Handle the file upload logic (e.g., send the file to your backend)
-            console.log("File selected for upload:", file);
-
-            // Example: You could send the file to your backend via a POST request (using FormData)
-            const formData = new FormData();
-            formData.append('video', file);
-
-            // POST request to backend for uploading video
-            fetch('http://127.0.0.1:5000/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-             
-                // Dynamically add the new video card to the grid
+            // Close the form overlay
+            closeFormBtn.addEventListener('click', () => {
+                formOverlay.style.display = 'none';
             });
-
-            alert("Chatroom Created")
-        }
+    
+            // Handle form submission
+            uploadVideoBtn.addEventListener('click', () => {
+                const videoTitle = document.getElementById('video-title-input').value.trim();
+                const videoSrc = document.getElementById('video-src-input').value.trim();
+    
+                if (!videoTitle || !videoSrc) {
+                    alert('Please fill in both fields.');
+                    return;
+                }
+    
+                const newVideo = {
+                    src: videoSrc,
+                    title: videoTitle,
+                    thumbnail: "image/placeholder-thumbnail.jpg", // Placeholder thumbnail
+                    date: new Date().toISOString().slice(0, 16).replace('T', ' '), // Current date and time
+                    views: 0
+                };
+    
+                // Send data to the backend
+                fetch('http://localhost:8007/api/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: videoTitle, src: videoSrc })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('Video uploaded successfully!');
+                        formOverlay.style.display = 'none';
+    
+                        // Add the new video card to the grid
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${newVideo.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${newVideo.thumbnail}" alt="cover">
+                            <h4>${newVideo.title}</h4>
+                            <p>${newVideo.date}</p>
+                            <p>${newVideo.views} views</p>
+                        `;
+                        videoGrid.appendChild(videoCard);
+                    } else {
+                        alert('Failed to upload video: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error uploading video:', error));
+            });
         });
-        });
-    </script>    
+    </script>
+    
+        <!-- Add this in the body for the form and overlay -->
+       
+        
 </body>
 </html>
