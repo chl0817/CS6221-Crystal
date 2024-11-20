@@ -17,6 +17,9 @@
                 <h1 class="navbar-title">CS 6221 Crystal Project</h1>
             </div>
         </header>
+        
+
+        
 
         <!-- main -->
         <main class="main-content">
@@ -26,7 +29,67 @@
             <div id="video-grid" class="video-grid">
                 <!-- Video cards will be dynamically inserted here -->
             </div>
+            <div id="search-results" class="video-grid">
+                <!-- Video cards will be dynamically inserted here -->
+            </div>
         </main>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const searchBar = document.getElementById("search-bar");
+                const searchResults = document.getElementById("search-results");
+    
+                // Handle Enter key press to trigger the search
+                searchBar.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        const query = searchBar.value.trim();
+    
+                        if (query.length === 0) {
+                            searchResults.innerHTML = ""; // Clear results on empty input
+                            return;
+                        }
+    
+                        // Perform the search
+                        fetch("http://localhost:8007/api/search", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ query }),
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error("Failed to fetch search results");
+                                }
+                                return response.json();
+                            })
+                            .then((results) => {
+                                renderVideos(results);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                searchResults.innerHTML = `<p class="error">Error fetching results</p>`;
+                            });
+                    }
+                });
+    
+                // Function to display results
+                const renderVideos = (videos) => {
+                    searchResults.innerHTML = ""; // Clear previous results
+                    videos.forEach((video) => {
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${video.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${video.thumbnail}" alt="cover">
+                            <h4>${video.title}</h4>
+                            <p>${new Date(video.date).toLocaleDateString()}</p>
+                            <p>${video.views} views</p>
+                        `;
+                        searchResults.appendChild(videoCard);
+                    });
+                };
+            });
+        </script>
     </div>
 
     <!-- Hidden file input for video upload -->
@@ -102,24 +165,12 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Upload successful:', data);
+                alert(data.message);
+             
                 // Dynamically add the new video card to the grid
-                const video = data.video;
-                const videoCard = document.createElement('a');
-                videoCard.href = `live.html?src=${video.src}`;
-                videoCard.className = 'video-card';
-                videoCard.innerHTML = `
-                    <img src="${video.thumbnail}" alt="cover">
-                    <h4>${video.title}</h4>
-                    <p>${video.date}</p>
-                    <p>${video.views} views</p>
-                `;
-                videoGrid.insertBefore(videoCard, videoGrid.lastElementChild);  // Insert before the "Upload New Video" card
-            })
-            .catch(error => {
-                console.error('Upload failed:', error);
-                alert('Upload failed. Please try again.');
             });
+
+            alert("Chatroom Created")
         }
         });
         });
