@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Send "user joined" message when user connects
+    socket.emit('user joined', username);
+
     // Get the video source from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const videoSrc = urlParams.get('src');
