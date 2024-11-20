@@ -29,11 +29,15 @@
         </main>
     </div>
 
+    <!-- Hidden file input for video upload -->
+    <input type="file" id="video-file-input" style="display:none" accept="video/*">
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const videoGrid = document.getElementById('video-grid');
-            
-            // Fetch video data from the backend
+            const fileInput = document.getElementById('video-file-input');
+    
+            // Fetch video data from the backend API
             fetch('http://localhost:8007/api/videos')  // Ensure this is the correct URL
                 .then(response => {
                     if (!response.ok) {
@@ -45,6 +49,19 @@
                     // Clear existing content in the video grid
                     videoGrid.innerHTML = '';
 
+                    const uploadCard = document.createElement('a');
+                    uploadCard.className = 'video-card upload-card';
+                    uploadCard.innerHTML = `
+                        <div class="upload-card-content">
+                            <h4>Upload New Video</h4>
+                        </div>
+                    `;
+                    uploadCard.addEventListener('click', () => {
+                        fileInput.click(); // Trigger file input dialog when clicked
+                    });
+    
+                    videoGrid.appendChild(uploadCard);
+    
                     // Dynamically create video cards for each video
                     videos.forEach(video => {
                         const videoCard = document.createElement('a');
@@ -54,16 +71,58 @@
                             <img src="${video.thumbnail}" alt="cover">
                             <h4>${video.title}</h4>
                             <p>${video.date}</p>
-                            <p>${video.views} times</p>
+                            <p>${video.views} views</p>
                         `;
                         videoGrid.appendChild(videoCard);
                     });
+    
+                    
+                    
                 })
                 .catch(error => {
                     console.error('Error loading videos:', error);
                     videoGrid.innerHTML = '<p>Failed to load videos.</p>';
                 });
+    
+            // Handle the file input change event (when a user selects a file)
+            fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Handle the file upload logic (e.g., send the file to your backend)
+            console.log("File selected for upload:", file);
+
+            // Example: You could send the file to your backend via a POST request (using FormData)
+            const formData = new FormData();
+            formData.append('video', file);
+
+            // POST request to backend for uploading video
+            fetch('http://127.0.0.1:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Upload successful:', data);
+                // Dynamically add the new video card to the grid
+                const video = data.video;
+                const videoCard = document.createElement('a');
+                videoCard.href = `live.html?src=${video.src}`;
+                videoCard.className = 'video-card';
+                videoCard.innerHTML = `
+                    <img src="${video.thumbnail}" alt="cover">
+                    <h4>${video.title}</h4>
+                    <p>${video.date}</p>
+                    <p>${video.views} views</p>
+                `;
+                videoGrid.insertBefore(videoCard, videoGrid.lastElementChild);  // Insert before the "Upload New Video" card
+            })
+            .catch(error => {
+                console.error('Upload failed:', error);
+                alert('Upload failed. Please try again.');
+            });
+        }
         });
-    </script>
+        });
+    </script>    
 </body>
 </html>
