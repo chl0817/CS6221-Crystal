@@ -113,6 +113,8 @@
             <input type="text" id="video-title-input" placeholder="Enter video title">
             <label for="video-src-input">Video URL:</label>
             <input type="text" id="video-src-input" placeholder="Enter video URL">
+            <label for="thumb-src-input">Thumbnail URL:</label>
+            <input type="text" id="thumb-src-input" placeholder="Enter Thumbnail URL">
             <div class="form-actions">
                 <button id="upload-video-btn" class="upload-btn">Upload</button>
                 <button id="close-form-btn" class="close-btn">Close</button>
@@ -175,6 +177,7 @@
             uploadVideoBtn.addEventListener('click', () => {
                 const videoTitle = document.getElementById('video-title-input').value.trim();
                 const videoSrc = document.getElementById('video-src-input').value.trim();
+                const thumbSrc = document.getElementById('thumb-src-input').value.trim();
     
                 if (!videoTitle || !videoSrc) {
                     alert('Please fill in both fields.');
@@ -184,8 +187,8 @@
                 const newVideo = {
                     src: videoSrc,
                     title: videoTitle,
-                    thumbnail: "image/placeholder-thumbnail.jpg", // Placeholder thumbnail
-                    date: new Date().toISOString().slice(0, 16).replace('T', ' '), // Current date and time
+                    thumbnail: thumbSrc, 
+                    date: new Date().toISOString().slice(0, 16).replace('T', ' '), 
                     views: 0
                 };
     
@@ -193,7 +196,7 @@
                 fetch('http://localhost:8007/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title: videoTitle, src: videoSrc })
+                    body: JSON.stringify({ title: videoTitle, src: videoSrc, thumbnail: thumbSrc })
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -225,8 +228,6 @@
             });
         });
     </script>
-    
-        <!-- Add this in the body for the form and overlay -->
        
         
 </body>

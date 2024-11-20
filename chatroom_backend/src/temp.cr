@@ -27,7 +27,7 @@ server = HTTP::Server.new do |context|
     context.response.print(videos.to_json)
 
   elsif context.request.path == "/api/upload" && context.request.method == "POST"
-    puts("NEW UPLOAD")
+  puts("NEW UPLOAD")
     if context.request.body.nil?
       context.response.status = HTTP::Status::BAD_REQUEST
       context.response.print("Request body is missing.")
@@ -41,6 +41,7 @@ server = HTTP::Server.new do |context|
         # Validate input data
         title = video_data["title"]?.try(&.as_s) || ""
         src = video_data["src"]?.try(&.as_s) || ""
+        thumbnail = video_data["thumbnail"]?.try(&.as_s) || "image/placeholder-thumbnail.jpg"
 
 
         puts "Video Data: #{video_data.inspect}"
@@ -52,7 +53,7 @@ server = HTTP::Server.new do |context|
           new_video = {
             "src" => src,
             "title" => title,
-            "thumbnail" => "image/placeholder-thumbnail.jpg", # Placeholder thumbnail
+            "thumbnail" => thumbnail, 
             "date" => Time.local.to_s("%Y-%m-%d %H:%M"),
             "views" => 0
           }
@@ -62,42 +63,4 @@ server = HTTP::Server.new do |context|
           context.response.print({ success: true, message: "Video added successfully." }.to_json)
         else
           context.response.status = HTTP::Status::BAD_REQUEST
-          context.response.content_type = "application/json"
-          context.response.print({ success: false, message: "Invalid input data." }.to_json)
-        end
-        rescue e
-          context.response.status = HTTP::Status::BAD_REQUEST
-          context.response.print("Error parsing request: #{e.message}")
-        end
-    end
-  elsif context.request.path == "/api/search" && context.request.method == "POST"
-    if context.request.body.nil?
-      context.response.status = HTTP::Status::BAD_REQUEST
-      context.response.print("Request body is missing.")
-      next
-    end
-  
-    body = context.request.body.not_nil!.gets_to_end
-    search_data = JSON.parse(body).as_h
-  
-    if search_data["query"]
-      search_term = search_data["query"].as_s
-  
-      # Filter videos based on search term
-      results = videos.select do |video|
-        title = video["title"]
-        title.is_a?(String) && title.includes?(search_term)
-      end
-  
-      context.response.content_type = "application/json"
-      context.response.print(results.to_json)
-    else
-      context.response.status = HTTP::Status::BAD_REQUEST
-      context.response.print("Missing 'query' parameter.")
-    end
-  end
-  
-end
-server.bind_tcp("0.0.0.0", 8007)
-puts "Server running on http://localhost:8007"
-server.listen
+          context.response.cont
