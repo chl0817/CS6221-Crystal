@@ -17,30 +17,218 @@
                 <h1 class="navbar-title">CS 6221 Crystal Project</h1>
             </div>
         </header>
+        
+
+        
 
         <!-- main -->
         <main class="main-content">
+            <nav id="results-tab-bar" class="tab-bar">
+               
+            </nav>
+            <div id="search-results" class="video-grid">
+              
+            </div>
+            
             <nav class="tab-bar">
                 <span class="tab active">Newest</span>
             </nav>
             <div id="video-grid" class="video-grid">
-                <!-- video -->
-                <a href="live.html?src=http://vjs.zencdn.net/v/oceans.mp4" class="video-card">
-                    <img src="image/1.jpg" alt="cover">
-                    <h4>test video 1</h4>
-                    <p>2024-11-17 21:09</p>
-                    <p>4966 times</p>
-                </a>
-                <a href="live.html?src=https://media.w3.org/2010/05/sintel/trailer.mp4" class="video-card">
-                    <img src="image/2.jpg" alt="cover">
-                    <h4>test video 2</h4>
-                    <p>2024-10-27 21:09</p>
-                    <p>2266 times</p>
-                </a>
+            
             </div>
+
+           
         </main>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const searchBar = document.getElementById("search-bar");
+                const searchResults = document.getElementById("search-results");
+                const resultsTabBr = document.getElementById("results-tab-bar");
+    
+
+                searchBar.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        const query = searchBar.value.trim();
+                        resultsTabBr.innerHTML = '<span id="results-tab" class="tab active">Results</span>'
+    
+                        if (query.length === 0) {
+                            searchResults.innerHTML = "";
+                            return;
+                        }
+    
+                       
+                        fetch("http://localhost:8007/api/search", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ query }),
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error("Failed to fetch search results");
+                                }
+                                return response.json();
+                            })
+                            .then((results) => {
+                                renderVideos(results);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                searchResults.innerHTML = `<p class="error">Error fetching results</p>`;
+                            });
+                    }
+                });
+    
+
+                const renderVideos = (videos) => {
+                    if (videos.length === 0) {
+                     searchResults.innerHTML = "<p class='no-results'>No videos available</p>";
+                     }   
+                     else {
+                    searchResults.innerHTML = ""; 
+                    videos.forEach((video) => {
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${video.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${video.thumbnail}" alt="cover">
+                            <h4>${video.title}</h4>
+                            <p>${new Date(video.date).toLocaleDateString()}</p>
+                            <p>${video.views} views</p>
+                        `;
+                        searchResults.appendChild(videoCard);
+                    });
+                }
+                };
+            });
+        </script>
     </div>
 
-    <script src="script.js"></script>
+
+    <div id="form-overlay" class="form-overlay" style="display: none;">
+        <div class="upload-form">
+            <h3>Upload New Video</h3>
+            <label for="video-title-input">Video Title:</label>
+            <input type="text" id="video-title-input" placeholder="Enter video title">
+            <label for="video-src-input">Video URL:</label>
+            <input type="text" id="video-src-input" placeholder="Enter video URL">
+            <label for="thumb-src-input">Thumbnail URL:</label>
+            <input type="text" id="thumb-src-input" placeholder="Enter Thumbnail URL">
+            <div class="form-actions">
+                <button id="upload-video-btn" class="upload-btn">Upload</button>
+                <button id="close-form-btn" class="close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoGrid = document.getElementById('video-grid');
+            const formOverlay = document.getElementById('form-overlay');
+            const closeFormBtn = document.getElementById('close-form-btn');
+            const uploadVideoBtn = document.getElementById('upload-video-btn');
+    
+            
+            fetch('http://localhost:8007/api/videos')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(videos => {
+                    videoGrid.innerHTML = '';
+    
+                    
+                    const uploadCard = document.createElement('a');
+                    uploadCard.className = 'video-card upload-card';
+                    uploadCard.innerHTML = `
+                        <img class="video-thumbnail" src="image/4.png" alt="video thumbnail">
+                        <h4 class="video-title">Create New Video</h4>
+                    `;
+                    uploadCard.addEventListener('click', () => {
+                        formOverlay.style.display = 'flex'; // Show the form overlay
+                    });
+                    videoGrid.appendChild(uploadCard);
+    
+                    // Dynamically add video cards
+                    videos.forEach(video => {
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${video.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${video.thumbnail}" alt="cover">
+                            <h4>${video.title}</h4>
+                            <p>${video.date}</p>
+                            <p>${video.views} views</p>
+                        `;
+                        videoGrid.appendChild(videoCard);
+                    });
+                })
+                .catch(error => console.error('Error loading videos:', error));
+    
+
+            closeFormBtn.addEventListener('click', () => {
+                formOverlay.style.display = 'none';
+            });
+    
+       
+            uploadVideoBtn.addEventListener('click', () => {
+                const videoTitle = document.getElementById('video-title-input').value.trim();
+                const videoSrc = document.getElementById('video-src-input').value.trim();
+                const thumbSrc = document.getElementById('thumb-src-input').value.trim();
+    
+                if (!videoTitle || !videoSrc) {
+                    alert('Please fill in both fields.');
+                    return;
+                }
+    
+                const newVideo = {
+                    src: videoSrc,
+                    title: videoTitle,
+                    thumbnail: thumbSrc, 
+                    date: new Date().toISOString().slice(0, 16).replace('T', ' '), 
+                    views: 0
+                };
+    
+            
+                fetch('http://localhost:8007/api/upload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: videoTitle, src: videoSrc, thumbnail: thumbSrc })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert('Video uploaded successfully!');
+                        formOverlay.style.display = 'none';
+    
+                        // Add the new video card to the grid
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${newVideo.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${newVideo.thumbnail}" alt="cover">
+                            <h4>${newVideo.title}</h4>
+                            <p>${newVideo.date}</p>
+                            <p>${newVideo.views} views</p>
+                        `;
+                        videoGrid.appendChild(videoCard);
+                    } else {
+                        alert('Failed to upload video: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error uploading video:', error));
+            });
+        });
+    </script>
+       
+        
 </body>
 </html>
