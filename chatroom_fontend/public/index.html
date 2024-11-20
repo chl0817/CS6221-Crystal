@@ -24,23 +24,46 @@
                 <span class="tab active">Newest</span>
             </nav>
             <div id="video-grid" class="video-grid">
-                <!-- video -->
-                <a href="live.html?src=http://vjs.zencdn.net/v/oceans.mp4" class="video-card">
-                    <img src="image/1.jpg" alt="cover">
-                    <h4>test video 1</h4>
-                    <p>2024-11-17 21:09</p>
-                    <p>4966 times</p>
-                </a>
-                <a href="live.html?src=https://media.w3.org/2010/05/sintel/trailer.mp4" class="video-card">
-                    <img src="image/2.jpg" alt="cover">
-                    <h4>test video 2</h4>
-                    <p>2024-10-27 21:09</p>
-                    <p>2266 times</p>
-                </a>
+                <!-- Video cards will be dynamically inserted here -->
             </div>
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoGrid = document.getElementById('video-grid');
+            
+            // Fetch video data from the backend
+            fetch('http://localhost:8007/api/videos')  // Ensure this is the correct URL
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(videos => {
+                    // Clear existing content in the video grid
+                    videoGrid.innerHTML = '';
+
+                    // Dynamically create video cards for each video
+                    videos.forEach(video => {
+                        const videoCard = document.createElement('a');
+                        videoCard.href = `live.html?src=${video.src}`;
+                        videoCard.className = 'video-card';
+                        videoCard.innerHTML = `
+                            <img src="${video.thumbnail}" alt="cover">
+                            <h4>${video.title}</h4>
+                            <p>${video.date}</p>
+                            <p>${video.views} times</p>
+                        `;
+                        videoGrid.appendChild(videoCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading videos:', error);
+                    videoGrid.innerHTML = '<p>Failed to load videos.</p>';
+                });
+        });
+    </script>
 </body>
 </html>
